@@ -1,0 +1,30 @@
+{
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/api/validate_coupon",
+      "description": "Validates the discount coupon code.",
+      "request": {
+        "code": "string"
+      },
+      "response": {
+        "valid": "boolean",
+        "discount_percent": "number"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/process_payment",
+      "description": "Submits the final order.",
+      "request": {
+        "user": {
+          "name": "string",
+          "email": "string",
+          "address": "string"
+        },
+        "payment_method": "string",
+        "total_amount": "number"
+      }
+    }
+  ]
+}

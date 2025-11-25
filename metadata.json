@@ -1,0 +1,5 @@
+{
+  "name": "AutoQA Agent",
+  "description": "An intelligent, autonomous QA agent that ingests documentation and HTML to generate grounded test cases and Selenium scripts.",
+  "requestFramePermissions": []
+}

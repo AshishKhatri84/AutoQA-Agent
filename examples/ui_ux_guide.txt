@@ -1,0 +1,19 @@
+UI/UX Guidelines
+
+1. Buttons
+   - "Add to Cart" buttons should be standard default style.
+   - "Pay Now" button must be GREEN to indicate a primary action.
+   - "Apply" discount button should be adjacent to the input field.
+
+2. Validation Errors
+   - All form validation errors must be displayed in RED text.
+   - Errors should appear immediately below the invalid field.
+   - Required fields: Name, Email, Address.
+
+3. Success Feedback
+   - Upon successful payment, display "Payment Successful!" message.
+   - Success message color must be GREEN.
+
+4. Layout
+   - Cart summary should be visible at the top.
+   - Shipping options should be radio buttons for easy selection.
