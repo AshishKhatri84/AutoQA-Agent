@@ -103,20 +103,41 @@ export const generateSeleniumScript = async (
     ${relevantDocs}
     
     REQUIREMENTS:
-    1. Include all necessary imports:
+    1. IMPORTS:
        - selenium
        - webdriver from selenium
        - By from selenium.webdriver.common.by
        - WebDriverWait from selenium.webdriver.support.ui
        - expected_conditions as EC from selenium.webdriver.support
        - os
-       - time (if needed for small pauses, though explicit waits are preferred)
-    2. Setup the Chrome driver (using webdriver.Chrome()).
-    3. Load the page. Assume the file is named 'checkout.html' and is located in the same directory as the script. Use os.getcwd() + filename.
-    4. Implement the test steps using precise selectors (ID, Name, CSS) found in the provided HTML content.
-    5. Add assertions to verify the Expected Result programmatically. Print "TEST PASSED" or "TEST FAILED" based on the assertion.
-    6. Wrap the logic in a try-finally block to ensure driver.quit() is always called.
-    7. Return ONLY the Python code. No markdown formatting, no backticks.
+       - time (only if absolutely necessary, prefer explicit waits)
+    
+    2. DRIVER SETUP:
+       - Initialize 'driver = webdriver.Chrome()'.
+       - Set an implicit wait: 'driver.implicitly_wait(10)'.
+       - Load the file: 
+         current_dir = os.getcwd()
+         file_path = os.path.join(current_dir, 'checkout.html')
+         driver.get(f"file:///{file_path}")
+    
+    3. TEST EXECUTION:
+       - Use 'WebDriverWait(driver, 10).until(EC...)' for critical interactions (buttons, dynamic elements).
+       - Use PRECISE selectors (ID is best, then CSS Selector) found in the HTML content provided.
+       - Perform the actions described in the Scenario.
+    
+    4. ASSERTION & VALIDATION:
+       - Retrieve the actual result from the page (text, element presence, etc.).
+       - Compare with Expected Result.
+       - Print "TEST PASSED: [details]" if it matches.
+       - Print "TEST FAILED: [details]" if it fails.
+    
+    5. ROBUSTNESS:
+       - Wrap the execution logic in a 'try...finally' block to ensure 'driver.quit()' is ALWAYS called, even if the test fails.
+    
+    6. OUTPUT FORMAT:
+       - Return ONLY the Python code. 
+       - Do NOT wrap in markdown (\`\`\`python). 
+       - Do NOT add explanations outside the code comments.
   `;
 
   try {
@@ -130,7 +151,8 @@ export const generateSeleniumScript = async (
 
     let text = response.text || "";
     
-    // Improved cleanup for markdown code blocks
+    // Improved cleanup for markdown code blocks to ensure clean copy-paste
+    // Removes ```python at start, ``` at end, and generic ```
     text = text.replace(/^```python\s*/i, '').replace(/^```\s*/, '').replace(/\s*```$/, '');
     
     return text.trim();

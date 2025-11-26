@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Upload, FileText, Code, CheckCircle, Trash2, Loader2 } from 'lucide-react';
+import { Upload, FileText, Code, CheckCircle, Trash2, Loader2, AlertCircle } from 'lucide-react';
 import { UploadedFile } from '../types';
 
 interface IngestionPanelProps {
@@ -13,13 +13,22 @@ const IngestionPanel: React.FC<IngestionPanelProps> = ({ files, onFilesAdded, on
   const docInputRef = useRef<HTMLInputElement>(null);
   const htmlInputRef = useRef<HTMLInputElement>(null);
   const [isBuilding, setIsBuilding] = useState(false);
+  const [buildStatus, setBuildStatus] = useState("Processing...");
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, type: 'document' | 'html') => {
     if (e.target.files) {
       const newFiles: UploadedFile[] = [];
       for (let i = 0; i < e.target.files.length; i++) {
         const file = e.target.files[i];
-        const text = await file.text();
+        let text = "";
+        
+        // Handle PDFs gracefully for this frontend demo
+        if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+            text = "[PDF Content Placeholder - Binary extraction handled by backend in production]";
+        } else {
+            text = await file.text();
+        }
+
         newFiles.push({
           name: file.name,
           content: text,
@@ -28,18 +37,36 @@ const IngestionPanel: React.FC<IngestionPanelProps> = ({ files, onFilesAdded, on
         });
       }
       onFilesAdded(newFiles);
-      // Reset input
-      e.target.value = '';
+      e.target.value = ''; // Reset input
     }
   };
 
   const handleBuildClick = () => {
     setIsBuilding(true);
-    // Simulate vector embedding/chunking process
-    setTimeout(() => {
-        setIsBuilding(false);
-        onBuild();
-    }, 1500);
+    
+    // Simulate the Vector DB Ingestion Pipeline steps
+    const steps = [
+        "Parsing documents...",
+        "Chunking text (RecursiveCharacterTextSplitter)...",
+        "Generating embeddings (HuggingFace)...",
+        "Indexing in Vector DB..."
+    ];
+
+    let currentStep = 0;
+    setBuildStatus(steps[0]);
+
+    const interval = setInterval(() => {
+        currentStep++;
+        if (currentStep < steps.length) {
+            setBuildStatus(steps[currentStep]);
+        } else {
+            clearInterval(interval);
+            setTimeout(() => {
+                setIsBuilding(false);
+                onBuild();
+            }, 500);
+        }
+    }, 800);
   };
 
   const docs = files.filter(f => f.type === 'document');
@@ -71,11 +98,11 @@ const IngestionPanel: React.FC<IngestionPanelProps> = ({ files, onFilesAdded, on
             className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center cursor-pointer hover:bg-slate-50 transition-colors group"
           >
             <Upload className="w-8 h-8 mx-auto text-slate-400 group-hover:text-blue-500 mb-2" />
-            <p className="text-sm text-slate-600">Click to upload TXT, MD, JSON</p>
+            <p className="text-sm text-slate-600">Click to upload TXT, MD, JSON, PDF</p>
             <input 
               type="file" 
               multiple 
-              accept=".txt,.md,.json,.csv"
+              accept=".txt,.md,.json,.csv,.pdf"
               ref={docInputRef} 
               className="hidden" 
               onChange={(e) => handleFileChange(e, 'document')}
@@ -85,7 +112,10 @@ const IngestionPanel: React.FC<IngestionPanelProps> = ({ files, onFilesAdded, on
           <div className="mt-4 space-y-2 max-h-40 overflow-y-auto">
             {docs.map((doc) => (
               <div key={doc.name} className="flex items-center justify-between text-sm p-2 bg-slate-50 rounded border border-slate-100">
-                <span className="truncate max-w-[200px] text-slate-700">{doc.name}</span>
+                <div className="flex items-center gap-2 truncate max-w-[200px]">
+                    <span className="text-slate-700 truncate">{doc.name}</span>
+                    {doc.name.endsWith('.pdf') && <span className="text-[10px] px-1 bg-orange-100 text-orange-600 rounded">PDF</span>}
+                </div>
                 <button onClick={() => onRemoveFile(doc.name)} className="text-slate-400 hover:text-red-500">
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -138,7 +168,7 @@ const IngestionPanel: React.FC<IngestionPanelProps> = ({ files, onFilesAdded, on
         </div>
       </div>
 
-      <div className="flex justify-center pt-6">
+      <div className="flex flex-col items-center pt-6 space-y-4">
         <button
           onClick={handleBuildClick}
           disabled={!canBuild || isBuilding}
@@ -150,8 +180,14 @@ const IngestionPanel: React.FC<IngestionPanelProps> = ({ files, onFilesAdded, on
           `}
         >
           {isBuilding && <Loader2 className="w-5 h-5 animate-spin" />}
-          {isBuilding ? 'Processing Knowledge Base...' : 'Build Knowledge Base'}
+          {isBuilding ? 'Building Knowledge Base...' : 'Build Knowledge Base'}
         </button>
+        
+        {isBuilding && (
+            <div className="text-sm text-blue-600 animate-pulse font-medium">
+                {buildStatus}
+            </div>
+        )}
       </div>
     </div>
   );

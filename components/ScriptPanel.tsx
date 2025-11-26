@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { UploadedFile, TestCase } from '../types';
 import { generateSeleniumScript } from '../services/geminiService';
-import { ArrowLeft, Copy, Check, Code2, Loader2, Play } from 'lucide-react';
+import { ArrowLeft, Copy, Check, Code2, Loader2, Download } from 'lucide-react';
 
 interface ScriptPanelProps {
   testCase: TestCase;
@@ -35,6 +35,16 @@ const ScriptPanel: React.FC<ScriptPanelProps> = ({ testCase, documents, onBack }
     navigator.clipboard.writeText(code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleDownload = () => {
+    const element = document.createElement("a");
+    const file = new Blob([code], {type: 'text/x-python'});
+    element.href = URL.createObjectURL(file);
+    element.download = `${testCase.testId}_selenium.py`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
   };
 
   return (
@@ -73,16 +83,27 @@ const ScriptPanel: React.FC<ScriptPanelProps> = ({ testCase, documents, onBack }
       <div className="flex-1 bg-slate-900 rounded-xl overflow-hidden flex flex-col shadow-lg border border-slate-800">
         <div className="bg-slate-800 px-4 py-3 flex items-center justify-between border-b border-slate-700">
             <span className="text-slate-400 text-xs font-mono">python_selenium_test.py</span>
-            <div className="flex items-center gap-3">
-                 {loading && <span className="text-xs text-blue-400 flex items-center gap-1"><Loader2 className="w-3 h-3 animate-spin"/> AI Generating...</span>}
+            <div className="flex items-center gap-2">
+                 {loading && <span className="text-xs text-blue-400 flex items-center gap-1 mr-2"><Loader2 className="w-3 h-3 animate-spin"/> AI Generating...</span>}
+                 
                  {!loading && code && (
-                    <button 
-                        onClick={handleCopy}
-                        className="text-xs text-slate-300 hover:text-white flex items-center gap-1 bg-slate-700 hover:bg-slate-600 px-2 py-1 rounded transition-colors"
-                    >
-                        {copied ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
-                        {copied ? 'Copied' : 'Copy Code'}
-                    </button>
+                    <>
+                        <button 
+                            onClick={handleDownload}
+                            className="text-xs text-slate-300 hover:text-white flex items-center gap-1 bg-slate-700 hover:bg-slate-600 px-2 py-1 rounded transition-colors"
+                            title="Download Python File"
+                        >
+                            <Download className="w-3 h-3" />
+                            Download .py
+                        </button>
+                        <button 
+                            onClick={handleCopy}
+                            className="text-xs text-slate-300 hover:text-white flex items-center gap-1 bg-slate-700 hover:bg-slate-600 px-2 py-1 rounded transition-colors"
+                        >
+                            {copied ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
+                            {copied ? 'Copied' : 'Copy'}
+                        </button>
+                    </>
                  )}
             </div>
         </div>
@@ -94,7 +115,7 @@ const ScriptPanel: React.FC<ScriptPanelProps> = ({ testCase, documents, onBack }
                       <div className="absolute inset-0 border-4 border-slate-700 rounded-full"></div>
                       <div className="absolute inset-0 border-4 border-teal-500 rounded-full border-t-transparent animate-spin"></div>
                    </div>
-                   <p>Analyzing HTML Structure & Writing Selectors...</p>
+                   <p className="animate-pulse">Writing robust Selenium code...</p>
                 </div>
             ) : (
                 <pre className="text-blue-100 whitespace-pre-wrap leading-relaxed">
