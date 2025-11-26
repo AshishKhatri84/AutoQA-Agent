@@ -61,36 +61,38 @@ const App: React.FC = () => {
         
         {/* Sidebar Navigation (Stepper) */}
         <aside className="hidden md:block w-64 flex-shrink-0">
-          <nav className="space-y-1 sticky top-24">
-            <StepItem 
-                active={phase === AppPhase.INGESTION} 
-                completed={phase !== AppPhase.INGESTION}
-                icon={Layers}
-                title="Knowledge Base"
-                desc="Upload docs & HTML"
-            />
-            <div className={`h-8 w-px ml-6 ${phase !== AppPhase.INGESTION ? 'bg-blue-200' : 'bg-slate-200'}`}></div>
-            <StepItem 
-                active={phase === AppPhase.TEST_GENERATION}
-                completed={phase === AppPhase.SCRIPT_GENERATION}
-                icon={CheckCircle2}
-                title="Test Generator"
-                desc="Create test plans"
-            />
-            <div className={`h-8 w-px ml-6 ${phase === AppPhase.SCRIPT_GENERATION ? 'bg-blue-200' : 'bg-slate-200'}`}></div>
-            <StepItem 
-                active={phase === AppPhase.SCRIPT_GENERATION}
-                completed={false}
-                icon={FileCode}
-                title="Script Agent"
-                desc="Generate Selenium code"
-            />
-          </nav>
-          
-          <div className="mt-8 p-4 bg-slate-100 rounded-lg text-xs text-slate-500 border border-slate-200">
-            <p className="font-semibold mb-2 text-slate-700">Session Context</p>
-            <p className="mb-1">Files: {files.length}</p>
-            <p>KB Status: {phase === AppPhase.INGESTION ? 'Pending' : 'Ready'}</p>
+          <div className="sticky top-24">
+            <nav className="space-y-1">
+              <StepItem 
+                  active={phase === AppPhase.INGESTION} 
+                  completed={phase !== AppPhase.INGESTION}
+                  icon={Layers}
+                  title="Knowledge Base"
+                  desc="Upload docs & HTML"
+              />
+              <div className={`h-8 w-px ml-6 ${phase !== AppPhase.INGESTION ? 'bg-blue-200' : 'bg-slate-200'}`}></div>
+              <StepItem 
+                  active={phase === AppPhase.TEST_GENERATION}
+                  completed={phase === AppPhase.SCRIPT_GENERATION}
+                  icon={CheckCircle2}
+                  title="Test Generator"
+                  desc="Create test plans"
+              />
+              <div className={`h-8 w-px ml-6 ${phase === AppPhase.SCRIPT_GENERATION ? 'bg-blue-200' : 'bg-slate-200'}`}></div>
+              <StepItem 
+                  active={phase === AppPhase.SCRIPT_GENERATION}
+                  completed={false}
+                  icon={FileCode}
+                  title="Script Agent"
+                  desc="Generate Selenium code"
+              />
+            </nav>
+            
+            <div className="mt-8 p-4 bg-slate-100 rounded-lg text-xs text-slate-500 border border-slate-200">
+              <p className="font-semibold mb-2 text-slate-700">Session Context</p>
+              <p className="mb-1">Files: {files.length}</p>
+              <p>KB Status: {phase === AppPhase.INGESTION ? 'Pending' : 'Ready'}</p>
+            </div>
           </div>
         </aside>
 

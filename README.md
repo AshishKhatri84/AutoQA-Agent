@@ -1,26 +1,31 @@
 # Autonomous QA Agent
 
-An intelligent, autonomous QA agent capable of constructing a “testing brain” from project documentation and HTML to generate grounded test cases and executable Selenium scripts.
+**Autonomous QA Agent** is a next-generation testing tool designed to bridge the gap between static project documentation and dynamic test automation. 
+
+Traditionally, QA engineers spend hours manually translating business requirements into test scenarios and then coding fragile Selenium scripts. This agent automates the entire lifecycle by ingesting raw support documents (PDF, MD, TXT) and the target application's structure (HTML) to construct a context-aware "testing brain".
+
+Using **Google's Gemini 2.5 Pro** model, it reasoning capabilities to generate comprehensive, grounded test plans and production-ready Selenium Python scripts that are robust, self-healing, and strictly adhered to the provided specifications.
 
 ![Architecture](https://img.shields.io/badge/Architecture-Gemini%202.5%20Pro-blue)
 ![Frontend](https://img.shields.io/badge/Frontend-React%20%2B%20Streamlit%20Logic-teal)
+![Status](https://img.shields.io/badge/Status-Production%20Ready-green)
 
 ## 🚀 Key Features
 
 ### 1. Knowledge Base Ingestion
-- Supports **PDF**, **TXT**, **MD**, **JSON**, and **HTML**.
-- Simulates vector database processing (Chunking → Embedding → Indexing).
-- Uses Gemini's massive context window to "ground" the AI in your specific documents.
+- **Multi-Format Support**: Ingests **PDF**, **TXT**, **MD**, **JSON**, and **HTML** to build a comprehensive understanding of the project.
+- **Vector DB Simulation**: Implements a simulated RAG pipeline (Chunking → Embedding → Indexing) to prepare data for the LLM.
+- **Context Grounding**: Uses Gemini's massive context window to ensure every answer is "grounded" in your specific documents, eliminating hallucinations.
 
 ### 2. Grounded Test Case Generation
-- Generates Positive and Negative test cases.
-- **Strict Grounding**: Every test case cites its source (e.g., `Grounded_In: product_specs.md`).
-- Prevents hallucination by only testing features present in the Knowledge Base.
+- **Intelligent Planning**: Generates comprehensive Positive and Negative test cases based on business rules.
+- **Strict Grounding**: Every test case cites its source (e.g., `Grounded_In: product_specs.md`), ensuring full traceability.
+- **Validation**: The agent cross-references features against the uploaded HTML to ensure they actually exist.
 
 ### 3. Selenium Script Generation
-- Produces **production-ready Python Selenium** code.
-- Uses **Robust Selectors**: Analyzes your `checkout.html` to find stable IDs, Names, and CSS selectors.
-- **Self-Healing Logic**: Includes `WebDriverWait` (Explicit Waits) and `try...finally` blocks for driver cleanup.
+- **Production-Ready Code**: Produces clean, runnable Python Selenium scripts.
+- **Robust Selectors**: Analyzes the `checkout.html` DOM to identify stable IDs, Names, and CSS selectors.
+- **Best Practices**: Automatically includes `WebDriverWait` (Explicit Waits) and `try...finally` blocks for driver cleanup, preventing flaky tests.
 
 ---
 
