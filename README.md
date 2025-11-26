@@ -51,13 +51,6 @@ An intelligent, autonomous QA agent capable of constructing a “testing brain�
 
 ---
 
-## 🎥 Demo Video Guide
-
-To satisfy the "Demo Video" submission requirement, a complete screenplay has been provided in this repository. 
-See [DEMO_SCRIPT.md](./DEMO_SCRIPT.md) for a step-by-step guide on what to record to demonstrate the system's full capabilities.
-
----
-
 ## 📖 Usage Guide
 
 ### Phase 1: Build the Brain
