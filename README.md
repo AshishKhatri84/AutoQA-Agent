@@ -84,6 +84,15 @@ An intelligent, autonomous QA agent capable of constructing a “testing brain�
 
 ---
 
+## 🎥 Demo Video Guide
+
+To help you create the required 5-10 minute submission video, I have generated a complete screenplay.
+👉 **[View the Demo Script](DEMO_SCRIPT.md)**
+
+Follow this script step-by-step to demonstrate all requirements (Ingestion, Grounding, Script Generation) clearly.
+
+---
+
 ## 📂 Project Structure
 
 - `src/services/geminiService.ts`: Core AI logic. Uses `gemini-3-pro-preview` for advanced reasoning and coding.
